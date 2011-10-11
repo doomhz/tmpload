@@ -39,7 +39,7 @@
             var $localTemplate = $('#' + templateId);
             
             if ($localTemplate.length) {
-                html = tplWrapper ? tplWrapper($localTemplate.html()) : $localTemplate.html();
+                html = tplWrapper ? tplWrapper($localTemplate.text()) : $localTemplate.html();
                 cacheTemplate && self.cacheTemplate(templateId, html);
                 return html;
             } else {
