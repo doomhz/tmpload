@@ -6,7 +6,7 @@
 *
 * @author Dumitru Glavan
 * @link http://dumitruglavan.com
-* @version 3.0 (11-OCT-2011)
+* @version 3.0 (20-OCT-2011)
 * @requires jQuery v1.6 or later
 *
 * Find source on GitHub: https://github.com/doomhz/tmpload
@@ -39,7 +39,8 @@
             var $localTemplate = $('#' + templateId);
             
             if ($localTemplate.length) {
-                html = tplWrapper ? tplWrapper($localTemplate.text()) : $localTemplate.html();
+                html = self.decodeHtml($localTemplate.html());
+                html = tplWrapper ? tplWrapper(html) : html;
                 cacheTemplate && self.cacheTemplate(templateId, html);
                 return html;
             } else {
@@ -57,11 +58,17 @@
             return $.ajax({
                         url: templateUrl,
                         success: function (response) {
+                            response = self.decodeHtml(response);
                             response = tplWrapper ? tplWrapper(response) : response;
                             cacheTemplate && self.cacheTemplate(templateUrl, response);
                             return $.isFunction(loadCallback) && loadCallback.call(self, response);
                         }
                     });
+        };
+
+        // Decode the template HTML tags if any
+        self.decodeHtml = function (html) {
+            return html.replace(/&gt;/g, '>').replace(/&lt;/g, '<');
         };
         
         // Make a template id work without #
